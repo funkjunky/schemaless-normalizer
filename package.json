@@ -5,7 +5,7 @@
   "main": "index.js",
   "git": "https://github.com/funkjunky/schemaless-normalizer",
   "scripts": {
-    "test": "nyc mocha --require babel-core/register **/*.spec.js"
+    "test": "nyc --reporter=lcovonly mocha --require babel-core/register **/*.spec.js"
   },
   "babel": {
     "presets": [
