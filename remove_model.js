@@ -32,7 +32,7 @@ export default (modelName, model, state, config={}) => {
         if (Array.isArray(model[key])) {
             //We have to remove for every related-model in the array
             model[key].forEach(keyModel => addToResult(keyModel, state[mappedKey]));
-        } else if (expandable(modelName, model, key, oneToOne)) {
+        } else if (expandable(model, key, modelName, oneToOne)) {
             addToResult(model[key], state[pluralize(mappedKey)]);
         }   // else. We ignore primitives and null.
     });

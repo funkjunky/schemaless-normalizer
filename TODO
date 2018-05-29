@@ -5,10 +5,16 @@ TODO
     *- how to add coverage badges on github readme (code climate)
     *- choose unit testing framework (probably just mocha chai)
 
-- create repo, proper package.json with version, upload to github, add to code climate
+*- create repo, proper package.json with version, upload to github, add to code climate
 
-- create first test (.spec.js)
-    - expandable (easy one)
+*- create first test (.spec.js)
+    *- expandable (easy one)
+
+- I changed order of args for expandable, so update code. modelName 3rd
+
+- ensure npm test works as expected
+
+- fill out index.js with exports of functions from files.
 
 - push and check code climate to see if code coverage did it's thing
     - if not, thenget code coverage working with code climate.

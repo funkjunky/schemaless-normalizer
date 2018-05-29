@@ -34,7 +34,7 @@ export default (modelName, config={}) => data => {
 
         Object.keys(model).forEach((key) => {
             // if member is an object, then we need to extract it into our flattened data
-            if (expandable(modelName, model, key, oneToOne)) {
+            if (expandable(model, key, modelName, oneToOne)) {
 
                 const mappedKey = getPropertyTree(keyToModel, key, modelName, key);
                 // if member is an array, then extract all the models into flattened data

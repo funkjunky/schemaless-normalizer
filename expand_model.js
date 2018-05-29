@@ -21,7 +21,7 @@ export default (modelName, model, state, deepness=2, config={}) => {
 
         const newModel = { ...storeModel };
         Object.keys(newModel).forEach((key) => {
-            if (!expandable(modelName, storeModel, key, oneToOne)) return;
+            if (!expandable(storeModel, key, modelName, oneToOne)) return;
 
             //get the model name for the key, for example work_commit => commits
             const modelKey = getPropertyTree(keyToModel, key, modelName, key);

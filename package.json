@@ -5,7 +5,7 @@
   "main": "index.js",
   "git": "https://github.com/funkjunky/schemaless-normalizer",
   "scripts": {
-    "test": "npm test"
+    "test": "mocha"
   },
   "keywords": [
     "normalizer",
@@ -14,5 +14,9 @@
     "es"
   ],
   "author": "Jason McCarrell <jason.abz+npm@gmail.com> (http://www.jayeh.ca)",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
+  }
 }
