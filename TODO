@@ -10,11 +10,11 @@ TODO
 *- create first test (.spec.js)
     *- expandable (easy one)
 
-- I changed order of args for expandable, so update code. modelName 3rd
+*- I changed order of args for expandable, so update code. modelName 3rd
 
-- ensure npm test works as expected
+*- ensure npm test works as expected
 
-- fill out index.js with exports of functions from files.
+*- fill out index.js with exports of functions from files.
 
 - push and check code climate to see if code coverage did it's thing
     - if not, thenget code coverage working with code climate.
