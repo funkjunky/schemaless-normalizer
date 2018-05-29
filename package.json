@@ -5,7 +5,10 @@
   "main": "index.js",
   "git": "https://github.com/funkjunky/schemaless-normalizer",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --require babel-core/register **/*.spec.js"
+  },
+  "babel": {
+      "presets": ["env"]
   },
   "keywords": [
     "normalizer",
@@ -16,6 +19,8 @@
   "author": "Jason McCarrell <jason.abz+npm@gmail.com> (http://www.jayeh.ca)",
   "license": "MIT",
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
     "mocha": "^5.2.0"
   }
