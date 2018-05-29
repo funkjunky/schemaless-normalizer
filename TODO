@@ -16,8 +16,12 @@ TODO
 
 *- fill out index.js with exports of functions from files.
 
-- push and check code climate to see if code coverage did it's thing
-    - if not, thenget code coverage working with code climate.
+- get travis CI setup for schemaless normalizer
+
+- get code climate code coverage showing
+
+- do I still need the local instanbul code coverage folder? Or the dev dep?
+	- remove if I don't.
 
 - get coverage to 100% (.spec.js)
     - create definition of correct for flattened data and for expanded data
