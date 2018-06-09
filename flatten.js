@@ -1,5 +1,7 @@
-import { pluralize, getPropertyTree } from 'utilities/helpers';
+import pluralize from './pluralize.js';
+import getPropertyTree from './getPropertyTree.js';
 import expandable from './expandable';
+import forEachM2mRelation from './forEachM2mRelation';
 
 // const flattenUsers = flatten('users')
 // examples: yield put(mergeUsers(flattenUsers(unnormalizedUsers)))
@@ -19,10 +21,11 @@ export default (modelName, config={}) => data => {
     let result = {};
 
     const flattenModel = (modelName, model) => {
-        if (!models.includes(modelName)) {
+        if (models.length && !models.includes(modelName)) {
             console.warn('model name doesnt exist: ', modelName);
             return;
         }
+        if (!model.id) return;
 
         // if first model of type modelName, then create the modelName hash
         if (!result[modelName])
@@ -41,18 +44,22 @@ export default (modelName, config={}) => data => {
                 if (Array.isArray(model[key])) {
                     flattenArrayOfModels(mappedKey, model[key]);
 
-                    const m2mKey = getPropertyTree(manyToMany, false, modelName, mappedKey);
-                    if (!m2mKey) {
-                        result[modelName][model.id][key] = model[key].map(({ id }) => ({ id }));
-                    } else {
+                    const foundM2m = forEachM2mRelation(mappedKey, manyToMany, (m2mKey, relativeKey) => {
                         if (!result[m2mKey]) result[m2mKey] = {};
                         if (!result[m2mKey][modelName]) result[m2mKey][modelName] = {};
                         result[m2mKey][modelName][model.id] = {
                             id: model.id,
                             [key]: model[key].map(({ id }) => ({ id })),
                         };
-                    }
+                        model[key].forEach(({ id }) => {
+                            result[m2mKey][relativeKey][id] = {
+                                id,
+                                [key]: [{ id: model.id }]
+                            };
+                        });
+                    });
 
+                    result[modelName][model.id][key] = model[key].map(({ id }) => ({ id }));
                 // Else it's a plain object, just recurse
                 } else {
                     flattenModel(pluralize(mappedKey), model[key]);

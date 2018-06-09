@@ -1,23 +1,14 @@
 import chai from 'chai';
 
 import expandable from './expandable.js';
+import { person, oneToOne } from './sampleData';
 
 var assert = chai.assert;
 
 describe('expandable', () => {
-    const person = {
-        firstName: 'Jason',
-        company: {
-            id: 1,
-            name: 'Quaker Oats',
-        },
-    }
     const keyToObject = 'company';
     const keyToScalar = 'firstName';
     const keyNotExist = 'flavour';
-    const sampleOneToOne = {
-        Person: ['company'],
-    };
 
     describe('with oneToOne not set', () => {
         it('should return true with a model key pointing to an object', () => {
@@ -39,7 +30,7 @@ describe('expandable', () => {
         });
 
         it('should return false with key found in the model and modelName and key found in the oneToOne arg', () => {
-            assert.isNotTrue(expandable(person, keyToObject, 'Person', sampleOneToOne))
+            assert.isNotTrue(expandable(person, keyToObject, 'persons', oneToOne))
         });
     });
 });

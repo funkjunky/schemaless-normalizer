@@ -1,5 +1,6 @@
 import { pluralize, getPropertyTree } from 'utilities/helpers';
 import expandable from './expandable';
+import forEachM2mRelation from './forEachM2mRelation';
 
 // Function that expands things based on keyToModel
 // Deepness 1: { id: 1 } => { id: 1, name: 'thing', commit: { id: 2 } }
@@ -36,16 +37,11 @@ export default (modelName, model, state, deepness=2, config={}) => {
         });
 
         // Check for many to many
-        if (manyToMany[modelName]) {
-            Object.keys(manyToMany[modelName]).forEach((key) => {
-                const m2mModel = state[manyToMany[modelName][key]][modelName][modelId];
-                if (m2mModel) {
-                    newModel[key] = m2mModel[key].map(model => {
-                        return _expandModel(key, model, deepness - 1);
-                    });
-                }
-            });
-        }
+        forEachM2mRelation(modelName, manyToMany, [m2mKey, key] =>
+            newModel[key] = state[m2mKey][modelName][modelId][key].map(model =>
+                _expandModel(key, model, deepness - 1)
+        ));
+
         return newModel;
     };
 

@@ -16,15 +16,36 @@ TODO
 
 *- fill out index.js with exports of functions from files.
 
+*- Update config example
+
+*- allow single definition for manyToMany
+
+- add tests (.spec.js)
+    *- forEachM2mRelation
+    *- create definition of correct for flattened data and for expanded data
+    *- flatten
+    - expand model
+    - remove model
+
+- Are you sure many to many works correctly, since I changed it?
+
+- handle reflective data. So if we're given { book: { id: 1, author: { id: 1 } } } then also add { author: { id: 1, book: { id: 1 } } }
+	~ I was lazy before, but this should be added.
+
+- also im not sure how well remove model works... try and sure up any holes I know exist
+
 - get travis CI setup for schemaless normalizer
 
 - get code climate code coverage showing
 
+- get to 100% coverage
+
 - do I still need the local instanbul code coverage folder? Or the dev dep?
 	- remove if I don't.
 
-- get coverage to 100% (.spec.js)
-    - create definition of correct for flattened data and for expanded data
-    - flatten
-    - expand model
-    - remove model
+- publish
+	- clever short name
+	- beautiful readme with artsy cover image
+	- post on dischord "i-made-this" and on /r/redux and /r/javascript
+
+- When im done, restart my computer for updates
