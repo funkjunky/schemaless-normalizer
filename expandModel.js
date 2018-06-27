@@ -1,4 +1,5 @@
-import { pluralize, getPropertyTree } from 'utilities/helpers';
+import pluralize from './pluralize';
+import getPropertyTree from './getPropertyTree';
 import expandable from './expandable';
 import forEachM2mRelation from './forEachM2mRelation';
 
@@ -13,15 +14,12 @@ export default (modelName, model, state, deepness=2, config={}) => {
         // If we've expanded as deep as asked, then we're done! Return the model as-is
         if (deepness === 0) return model;
 
-        // WHEN we stop using graphQL, get rid of this.
-        const modelId = Number.isNaN(+model.id) ? model.id : +model.id;
-
-        // Grab the model from the store, if it doesn't exist, then return undefined.
-        const storeModel = state[modelName].entities[modelId];
+        // Grab the model from the store, if it doesn't exist, then return the model as-is
+        const storeModel = state[modelName][model.id];
         if (!storeModel) return model;
 
-        const newModel = { ...storeModel };
-        Object.keys(newModel).forEach((key) => {
+        const newModel = Object.assign({}, storeModel);
+        Object.keys(newModel).forEach(key => {
             if (!expandable(storeModel, key, modelName, oneToOne)) return;
 
             //get the model name for the key, for example work_commit => commits
@@ -37,10 +35,15 @@ export default (modelName, model, state, deepness=2, config={}) => {
         });
 
         // Check for many to many
-        forEachM2mRelation(modelName, manyToMany, [m2mKey, key] =>
-            newModel[key] = state[m2mKey][modelName][modelId][key].map(model =>
-                _expandModel(key, model, deepness - 1)
-        ));
+        forEachM2mRelation(modelName, manyToMany, (m2mKey, key) => {
+            const modelAliases = getPropertyTree(keyToModel, false, modelName);
+            let modelKey = key;
+            if (modelAliases) {
+                const aliasKey = Object.entries(modelAliases).find(([alias, modelKey]) => modelKey === key);
+                if (aliasKey) modelKey = aliasKey[0];
+            }
+            newModel[modelKey] = state[m2mKey][modelName][model.id][key].map(model => _expandModel(key, model, deepness - 1));
+        });
 
         return newModel;
     };

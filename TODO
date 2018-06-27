@@ -20,19 +20,19 @@ TODO
 
 *- allow single definition for manyToMany
 
-- add tests (.spec.js)
+*- add tests (.spec.js)
     *- forEachM2mRelation
     *- create definition of correct for flattened data and for expanded data
     *- flatten
-    - expand model
-    - remove model
+    *- expand model
+    *- remove model
+	*- I need to remove all 'entities' levels from the state. It should be identical to flattened state.
+	*- fix all main code, so it no longer uses entities
+	*- fix all tests
 
-- Are you sure many to many works correctly, since I changed it?
-
-- handle reflective data. So if we're given { book: { id: 1, author: { id: 1 } } } then also add { author: { id: 1, book: { id: 1 } } }
-	~ I was lazy before, but this should be added.
-
-- also im not sure how well remove model works... try and sure up any holes I know exist
+*- handle reflective data. So if we're given { book: { id: 1, author: { id: 1 } } } then also add { author: { id: 1, book: { id: 1 } } }
+	*- we need to check for the key in existing data, if singular or plural exist, then don't add the key, otherwise add the key. [don't do an overwrite object]
+	*- we need a base person, then have personWithConfig and personNoConfig
 
 - get travis CI setup for schemaless normalizer
 
@@ -49,3 +49,5 @@ TODO
 	- post on dischord "i-made-this" and on /r/redux and /r/javascript
 
 - When im done, restart my computer for updates
+
+- try and improve the code a bit

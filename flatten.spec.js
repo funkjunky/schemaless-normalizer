@@ -1,5 +1,5 @@
 import chai from 'chai';
-import { modelName, person, config, flattenedPersonNoConfig, flattenedPersonWithConfig } from './sampleData';
+import { modelName, person, personWithConfig, personNoConfig, config, stateNoConfig, stateWithConfig } from './sampleData';
 
 import flatten from './flatten';
 
@@ -18,11 +18,11 @@ describe('flatten', () => {
 
     it('Should flatten person correctly, without config needed.', () => {
         const value = flatten(modelName)(person);
-        assert.deepEqual(value, flattenedPersonNoConfig);
+        assert.deepEqual(value, stateNoConfig);
     });
 
     it('Should flatten person correctly while using config.', () => {
-        const value = flatten(modelName, config)(person);
-        assert.deepEqual(value, flattenedPersonWithConfig);
+        const value = flatten(modelName, config)(personWithConfig);
+        assert.deepEqual(value, stateWithConfig);
     });
 });

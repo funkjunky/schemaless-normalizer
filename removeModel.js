@@ -1,40 +1,63 @@
-import { pluralize, getPropertyTree } from 'utilities/helpers';
+import getPropertyTree from './getPropertyTree';
 import expandable from './expandable';
+import getM2mRelation from './getM2mRelation';
+import forEachM2mRelation from './forEachM2mRelation';
+import pluralize, { singulize } from './pluralize';
 
 // Used to remove / nullify related members
 // ie. removeModel dependency, removing from asset.dependencies, etc.
 export default (modelName, model, state, config={}) => {
-    const { keyToModel={}, oneToOne={} } = config;
+    const { keyToModel={}, oneToOne={}, manyToMany={} } = config;
     let result = {};
 
-    Object.keys(model).forEach(key => {
-        //The keys after keyToModel mapping
-        let mappedKey = getPropertyTree(keyToModel, key, modelName, key);
-        let relatedMappedKey = getPropertyTree(keyToModel, modelName, mappedKey, modelName);
-
-        //given the model member, add related nulls and filtered arrays to the result.
-        const addToResult = (keyModel, modelState) => {
-            const relatedModel = modelState.entities[keyModel.id];
-            let relatedValue = null; //many-to-one
-            if (Array.isArray(relatedModel[relatedMappedKey])) { //many-to-many
-                relatedValue = relatedModel[relatedMappedKey].filter(({ id }) => id !== model.id);
-            }
-
-            //nullify, or remove the removed-model from the related-model.
-            mappedKey = pluralize(mappedKey);
-            if (!result[mappedKey]) result[mappedKey] = {};
-            result[mappedKey][keyModel.id] = {
-                id: keyModel.id,
-                [relatedMappedKey]: relatedValue,
-            };
+    // manyToMany (m2m may not and often isn't in the object itsself, unless expanded)
+    forEachM2mRelation(modelName, manyToMany, (m2mModelKey, otherKey) => {
+        //TODO: replace m2mModelKet with otherkey
+        result[m2mModelKey] = {
+            [otherKey]: {},
         };
 
+        Object.values(state[m2mModelKey][otherKey])
+            .forEach(m => {
+                let keyModel = result[m2mModelKey][otherKey];
+                keyModel[m.id] = {
+                    id: m.id,
+                    [modelName]: state[m2mModelKey][otherKey][m.id][modelName].filter(({ id }) => id !== model.id),
+                };
+            });
+    });
+
+    Object.keys(model).forEach(key => {
+        let mappedKey = getPropertyTree(keyToModel, key, modelName, key);
+
+        // if somehow a m2m key got into the object, then ignore it. We handle m2m automatically above.
+        if(getM2mRelation(modelName, mappedKey, manyToMany)) {
+            return;
+        }
+
+        // manyToOne
         if (Array.isArray(model[key])) {
-            //We have to remove for every related-model in the array
-            model[key].forEach(keyModel => addToResult(keyModel, state[mappedKey]));
-        } else if (expandable(model, key, modelName, oneToOne)) {
-            addToResult(model[key], state[pluralize(mappedKey)]);
-        }   // else. We ignore primitives and null.
+            if (!result[mappedKey]) result[mappedKey] = {};
+
+            // nullify the referenced model
+            model[key].forEach(({ id }) => {
+                // modelName = 'companies' => 'company' (person['company'] = null)
+                result[mappedKey][id] = { id, [singulize(modelName)]: null };
+            });
+
+        // oneToMany
+        } else if (typeof model[key] === 'object') {
+            const pluralizedMappedKey = pluralize(mappedKey);
+            if (!result[pluralizedMappedKey]) result[pluralizedMappedKey] = {};
+
+            const stateEntity = state[pluralizedMappedKey][model[key].id];
+
+            // filter out the referenced model
+            result[pluralizedMappedKey][model[key].id] = {
+                id: model[key].id,
+                [modelName]: stateEntity[modelName].filter(v => v.id !== model.id),
+            };
+        }
     });
 
     return result;
