@@ -1,9 +1,9 @@
 language: node_js
 node_js:
-    - "7"
+    - "9"
 install:
-    - npm install -g codecov
+    - yarn
+    - yarn add -g codecov
 script:
-    - which nyc
     - yarn test
     - yarn report-coverage
