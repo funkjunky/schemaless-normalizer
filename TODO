@@ -34,11 +34,15 @@ TODO
 	*- we need to check for the key in existing data, if singular or plural exist, then don't add the key, otherwise add the key. [don't do an overwrite object]
 	*- we need a base person, then have personWithConfig and personNoConfig
 
-- get travis CI setup for schemaless normalizer
+*- get travis CI setup for schemaless normalizer
 
 - get code climate code coverage showing
 
-- get to 100% coverage
+- try and get the testing badge url
+
+- get any other badges that would be neat.
+
+- do I need the "7" version on the yml file??
 
 - do I still need the local instanbul code coverage folder? Or the dev dep?
 	- remove if I don't.

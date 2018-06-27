@@ -6,7 +6,7 @@
   "git": "https://github.com/funkjunky/schemaless-normalizer",
   "scripts": {
     "test": "nyc mocha --require babel-core/register **/*.spec.js",
-    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov"
+    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "babel": {
     "presets": "env",
