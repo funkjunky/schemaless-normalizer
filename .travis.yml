@@ -5,5 +5,5 @@ install:
     - yarn
     - yarn add -g codecov
 script:
-    - yarn test
-    - yarn report-coverage
+    - npm run test
+    - npm run report-coverage
