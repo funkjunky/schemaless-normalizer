@@ -3,3 +3,4 @@ node_modules
 cc-test-reporter
 *.log
 .nyc_output
+coverage.lcov
